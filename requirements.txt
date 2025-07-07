@@ -1,0 +1,17 @@
+# Python requirements for lawchatbot project
+faiss-cpu
+PyPDF2
+numpy
+scikit-learn
+streamlit
+langchain
+langchain-community
+langchain-text-splitters
+langchain-ollama
+langchain-groq
+langchain-core
+python-dotenv
+reportlab
+langchain-huggingface
+pdfplumber
+
