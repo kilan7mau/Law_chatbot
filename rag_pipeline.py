@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import simpleSplit
-
+import re
 load_dotenv()
 
 # Step1: Setup LLM (Use DeepSeek R1 with Groq)
@@ -38,12 +38,32 @@ Answer:
 """
 
 
+import re
+
+def _get_text_from_response(response):
+    # Trả về chuỗi text từ response (dict, AIMessage, hoặc string)
+    if isinstance(response, dict):
+        return response.get("content", "")
+    # Nếu là kiểu AIMessage (LangChain), trả về .content
+    if hasattr(response, "content"):
+        return response.content
+    # Nếu là string
+    if isinstance(response, str):
+        return response
+    return str(response)  # fallback
+
 def answer_query(documents, model, query, history=""):
     context = get_context(documents)
     prompt = ChatPromptTemplate.from_template(custom_prompt_template)
     chain = prompt | model
     response = chain.invoke({"question": query, "context": context, "history": history})
-    return response
+
+    answer = _get_text_from_response(response)
+
+    # (Tuỳ chọn) Loại bỏ phần <think>...</think>
+    answer = re.sub(r'<think>.*?</think>', '', answer, flags=re.DOTALL).strip()
+
+    return answer
 
 
 # Step4: Summarization Function

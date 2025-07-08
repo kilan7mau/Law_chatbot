@@ -1,3 +1,4 @@
+'''
 import streamlit as st
 
 from langchain_community.document_loaders import PDFPlumberLoader
@@ -6,7 +7,8 @@ from langchain_ollama import OllamaEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
-
+from dotenv import load_dotenv
+load_dotenv()
 
 
 custom_prompt_template = """
@@ -102,3 +104,4 @@ if ask_question:
 
     else:
         st.error("Kindly upload a valid PDF file and/or ask a valid Question!")
+        '''
